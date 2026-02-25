@@ -1,32 +1,38 @@
 package ru.floerka.max.core.api.objects;
 
+import lombok.Getter;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
+import ru.floerka.max.core.api.exceptions.RequireArgMissException;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.json.JsonConverter;
 
 import java.lang.reflect.Field;
 
+@Getter
 public class HttpRequestObject {
 
 
+    private final Class<? extends MaxObject> responseClazz;
     private final String url;
     private final HttpMethod method;
     private final @Nullable RequestBody requestBody;
 
-    public HttpRequestObject(String url, HttpMethod method) {
+    public HttpRequestObject(String url, HttpMethod method, Class<? extends MaxObject> responseClazz) {
         this.url = url;
         this.method = method;
         this.requestBody = null;
+        this.responseClazz = responseClazz;
     }
 
-    public HttpRequestObject(String url, HttpMethod method , RequestBody body) {
+    public HttpRequestObject(String url, HttpMethod method , RequestBody body, Class<? extends MaxObject> responseClazz) {
         this.url=url;
         this.method = method;
         this.requestBody = body;
+        this.responseClazz = responseClazz;
     }
 
     public <T extends MaxObject> HttpRequestObject(T object) {
@@ -35,6 +41,7 @@ public class HttpRequestObject {
         ApiEndpoint annotation = object.getClass().getAnnotation(ApiEndpoint.class);
 
         this.method = annotation.method();
+        this.responseClazz = annotation.response();
 
         try {
             MHttpUrl mHttpUrl = new MHttpUrl(annotation.path());
@@ -45,7 +52,6 @@ public class HttpRequestObject {
             for(Field field : fields) {
                 if(field.isAnnotationPresent(Param.class)) {
 
-
                     Param paramAnnotation = field.getAnnotation(Param.class);
 
                     String name;
@@ -55,16 +61,17 @@ public class HttpRequestObject {
 
                     Object paramObject = field.get(object);
 
+                    if(paramObject == null) {
+                        if(paramAnnotation.require()) {
+                            throw new RequireArgMissException(field.getName());
+                        }
+                        continue;
+                    }
+
 
                     switch (paramAnnotation.type()) {
-                        case DEFAULT,QUERY -> {
-                            if(paramObject != null) {
-                                urlBuilder.addQueryParameter(name, String.valueOf(paramObject));
-                            }
-                        }
-                        case BODY -> {
-                            body.put(name, JsonConverter.getObject(paramObject));
-                        }
+                        case DEFAULT,QUERY -> urlBuilder.addQueryParameter(name, String.valueOf(paramObject));
+                        case BODY -> body.put(name, JsonConverter.getObject(paramObject));
                     }
 
                 }

@@ -1,14 +1,17 @@
 package ru.floerka.max.core.json;
 
+import lombok.experimental.UtilityClass;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.models.request.callback.CallbackAnswerRequest;
 
 import java.lang.reflect.Field;
 
+@UtilityClass
 public class JsonConverter {
 
-    public static <T> JSONObject getObject(T object) {
+    public <T> JSONObject getObject(T object) {
 
         if (object == null) return null;
 
@@ -37,7 +40,7 @@ public class JsonConverter {
         }
     }
 
-    public static <T> T fromObject(JSONObject object, Class<T> objectClass) {
+    public <T> T fromObject(JSONObject object, Class<T> objectClass) {
         try {
             T main = objectClass.getConstructor().newInstance();
 
@@ -78,7 +81,7 @@ public class JsonConverter {
         }
     }
 
-    private static String convertName(String field) {
+    private String convertName(String field) {
         StringBuilder builder = new StringBuilder();
         for(char character : field.toCharArray()) {
             if(Character.isUpperCase(character))
@@ -88,7 +91,7 @@ public class JsonConverter {
         return builder.toString().toLowerCase();
     }
 
-    private static boolean isPrimitiveType(Class<?> check) {
+    private boolean isPrimitiveType(Class<?> check) {
         return check.equals(String.class) || check.equals(Boolean.class)
                 || check.equals(boolean.class)
                 || check.equals(Integer.class)
@@ -118,7 +121,7 @@ public class JsonConverter {
         }
         return jsonArray;
     }
-    private static Object fromJsonArray(JSONArray jsonArray, Class<?> componentType) throws Exception {
+    private Object fromJsonArray(JSONArray jsonArray, Class<?> componentType) throws Exception {
         int length = jsonArray.length();
         Object array = java.lang.reflect.Array.newInstance(componentType, length);
 

@@ -3,12 +3,13 @@ package ru.floerka.max.core.models.response.video;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
+import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.models.messages.body.PhotoAttachmentPayload;
 import ru.floerka.max.core.models.videos.VideoUrls;
 
 @AllArgsConstructor
 @Getter
-public class VideoResponse {
+public class VideoResponse extends MaxObject {
 
     private final String token;
     private final @Nullable VideoUrls urls;

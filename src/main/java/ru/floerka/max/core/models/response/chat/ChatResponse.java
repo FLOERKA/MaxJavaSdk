@@ -1,6 +1,10 @@
 package ru.floerka.max.core.models.response.chat;
 
-public class ChatResponse {
+import lombok.Getter;
+import ru.floerka.max.core.api.objects.MaxObject;
+
+@Getter
+public class ChatResponse extends MaxObject {
 
     private final boolean success;
     private final String message;
@@ -10,11 +14,4 @@ public class ChatResponse {
         this.message = message;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

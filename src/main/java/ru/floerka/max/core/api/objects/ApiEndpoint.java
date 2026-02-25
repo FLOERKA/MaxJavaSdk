@@ -11,5 +11,6 @@ public @interface ApiEndpoint {
 
     String path();
     HttpMethod method() default HttpMethod.GET;
+    Class<? extends MaxObject> response();
 
 }

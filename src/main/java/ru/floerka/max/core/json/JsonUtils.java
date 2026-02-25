@@ -1,11 +1,13 @@
 package ru.floerka.max.core.json;
 
+import lombok.experimental.UtilityClass;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@UtilityClass
 public class JsonUtils {
 
-    public static boolean isJson(String check) {
+    public boolean isJson(String check) {
         try {
             new JSONObject(check);
             return true;

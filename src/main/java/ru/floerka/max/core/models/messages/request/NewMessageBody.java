@@ -11,6 +11,7 @@ import ru.floerka.max.core.models.messages.enums.TextFormat;
 @AllArgsConstructor
 @Getter
 @Builder
+
 public class NewMessageBody extends MaxObject {
 
     private final @Param(require = false) String text;

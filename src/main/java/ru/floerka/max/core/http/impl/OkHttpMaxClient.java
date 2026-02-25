@@ -3,6 +3,9 @@ package ru.floerka.max.core.http.impl;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ru.floerka.max.core.api.objects.HttpMethod;
+import ru.floerka.max.core.api.objects.HttpRequestObject;
+import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.http.HttpConstants;
 import ru.floerka.max.core.http.OkHttpService;
 import ru.floerka.max.core.http.models.ClientResponse;
@@ -11,8 +14,8 @@ import ru.floerka.max.core.json.JsonUtils;
 import ru.floerka.max.core.models.bot.BotInfo;
 import ru.floerka.max.core.models.messages.Message;
 import ru.floerka.max.core.models.messages.chats.Chat;
-import ru.floerka.max.core.models.messages.request.chat.*;
 import ru.floerka.max.core.models.request.callback.CallbackAnswerRequest;
+import ru.floerka.max.core.models.request.chat.*;
 import ru.floerka.max.core.models.request.messages.EditMessageRequest;
 import ru.floerka.max.core.models.request.messages.GetMessagesRequest;
 import ru.floerka.max.core.models.request.messages.SendMessageRequest;
@@ -38,6 +41,49 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class OkHttpMaxClient extends OkHttpService {
+
+
+    public <A extends MaxObject, B extends MaxObject> B execute(String token, A object) {
+        HttpRequestObject requestObject = new HttpRequestObject(object);
+
+        String url = requestObject.getUrl();
+        RequestBody body = requestObject.getRequestBody();
+        HttpMethod method = requestObject.getMethod();
+
+        Request.Builder request = buildRequest(url);
+        switch (method) {
+            case GET -> request.get();
+            case PUT -> {
+                if(body != null)
+                    request.put(body);
+            }
+            case DELETE -> {
+                if(body != null)
+                    request.delete(body);
+                else request.delete();
+            }
+            case POST -> {
+                if(body != null)
+                    request.post(body);
+            }
+        }
+        addAuthorization(request, token);
+
+
+        ClientResponse response = getResponse(request.build());
+        if(response != null && response.isSuccessful()) {
+            String responseText = response.getText();
+            if(responseText != null && JsonUtils.isJson(responseText)) {
+
+                @SuppressWarnings("unchecked")
+                B responseObject = (B) JsonConverter.fromObject(new JSONObject(responseText), requestObject.getResponseClazz());
+
+                return responseObject;
+            }
+        }
+
+        return null;
+    }
 
 
     public BotInfo botInfo(String accessToken) {
@@ -423,14 +469,14 @@ public class OkHttpMaxClient extends OkHttpService {
     public UpdatesResponse getUpdates(String accessToken, UpdatesRequest request) {
         String url = HttpConstants.BASE_URL + HttpConstants.Appends.SUBSCRIPTIONS;
         url = url + "?check=true";
-        if(request.getLimit() != null && request.getLimit() > 0) {
-            url = url + "&limit="+request.getLimit();
+        if (request.getLimit() != null && request.getLimit() > 0) {
+            url = url + "&limit=" + request.getLimit();
         }
-        if(request.getTimeout() != null && request.getTimeout() > 0) {
-            url = url + "&timeout="+request.getTimeout();
+        if (request.getTimeout() != null && request.getTimeout() > 0) {
+            url = url + "&timeout=" + request.getTimeout();
         }
-        if(request.getMarker() != null) {
-            url = url+"&marker="+request.getMarker();
+        if (request.getMarker() != null) {
+            url = url + "&marker=" + request.getMarker();
         }
         if(request.getTypes() != null) {
             String append = String.join(",", request.getTypes());
@@ -440,7 +486,7 @@ public class OkHttpMaxClient extends OkHttpService {
         JSONObject parsed = JsonConverter.getObject(request);
 
         Request.Builder builder = buildRequest(url)
-                .delete(createBody(parsed));
+                .delete();
         addAuthorization(builder, accessToken);
 
         ClientResponse response = getResponse(builder.build());

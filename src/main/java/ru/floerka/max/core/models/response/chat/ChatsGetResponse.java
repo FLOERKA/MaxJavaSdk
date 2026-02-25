@@ -2,6 +2,7 @@ package ru.floerka.max.core.models.response.chat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.models.messages.chats.Chat;
 
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class ChatsGetResponse {
+public class ChatsGetResponse extends MaxObject {
 
     private final Chat[] chats;
     private final Long marker;

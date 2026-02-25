@@ -11,6 +11,6 @@ public @interface Param {
 
     String name() default "";
     boolean require() default true;
-    ParamType type() default ParamType.DEFAULT;
+    ParamType type() default ParamType.BODY;
 
 }

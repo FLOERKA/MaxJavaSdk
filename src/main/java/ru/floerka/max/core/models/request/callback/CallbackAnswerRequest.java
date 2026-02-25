@@ -7,11 +7,12 @@ import ru.floerka.max.core.api.objects.ApiEndpoint;
 import ru.floerka.max.core.api.objects.HttpMethod;
 import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.queries.Param;
+import ru.floerka.max.core.models.response.chat.ChatResponse;
 
 @AllArgsConstructor
 @Getter
 @Builder
-@ApiEndpoint(path = "callback/answer", method = HttpMethod.POST)
+@ApiEndpoint(path = "callback/answer", method = HttpMethod.POST, response = ChatResponse.class)
 public class CallbackAnswerRequest extends MaxObject {
     private final @Param String callbackId;
     private final @Param String body;

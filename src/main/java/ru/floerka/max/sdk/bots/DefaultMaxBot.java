@@ -2,6 +2,8 @@ package ru.floerka.max.sdk.bots;
 
 import lombok.Getter;
 import ru.floerka.max.core.http.impl.OkHttpMaxClient;
+import ru.floerka.max.core.models.request.subscriptions.AddSubscriptionsRequest;
+import ru.floerka.max.core.models.request.subscriptions.UpdatesRequest;
 
 public class DefaultMaxBot {
 
@@ -12,6 +14,10 @@ public class DefaultMaxBot {
     public DefaultMaxBot(String token) {
         client = new OkHttpMaxClient();
         this.token = token;
+    }
+
+
+    public void execute() {
     }
 
 
