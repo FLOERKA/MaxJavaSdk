@@ -2,5 +2,5 @@ package ru.floerka.max.core.api.objects;
 
 public enum HttpMethod {
 
-    GET,POST,DELETE,PUT
+    GET,POST,DELETE,UPDATE,PUT
 }
