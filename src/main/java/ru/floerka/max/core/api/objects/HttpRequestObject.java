@@ -11,13 +11,15 @@ import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.json.JsonConverter;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class HttpRequestObject {
 
 
     private final Class<? extends MaxObject> responseClazz;
-    private final String url;
+    private String url;
     private final HttpMethod method;
     private final @Nullable RequestBody requestBody;
 
@@ -49,6 +51,8 @@ public class HttpRequestObject {
 
             JSONObject body = new JSONObject();
             Field[] fields = object.getClass().getDeclaredFields();
+
+            List<String> patched = new ArrayList<>();
             for(Field field : fields) {
                 if(field.isAnnotationPresent(Param.class)) {
 
@@ -68,16 +72,26 @@ public class HttpRequestObject {
                         continue;
                     }
 
-
                     switch (paramAnnotation.type()) {
                         case DEFAULT,QUERY -> urlBuilder.addQueryParameter(name, String.valueOf(paramObject));
                         case BODY -> body.put(name, JsonConverter.getObject(paramObject));
+                        case URL -> {
+                            if(!isPatchedUrl(annotation.path()))
+                                urlBuilder.addPathSegment(String.valueOf(paramObject));
+                            else patched.add(String.valueOf(paramObject));
+                        }
                     }
-
                 }
             }
 
             this.url = urlBuilder.build().toString();
+
+            if(isPatchedUrl(annotation.path())) {
+                for(String patch : patched) {
+                    url = url.replaceFirst("\\{\\?}", patch);
+                }
+            }
+
             if(!body.isEmpty())
                 this.requestBody = createBody(body);
             else this.requestBody = null;
@@ -85,6 +99,10 @@ public class HttpRequestObject {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isPatchedUrl(String check) {
+        return check.contains("{?}");
     }
 
     private String convertFieldName(String name) {

@@ -9,27 +9,22 @@ import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.objects.MaxRequest;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.api.queries.ParamType;
-import ru.floerka.max.core.models.messages.request.NewMessageBody;
-import ru.floerka.max.core.models.response.chat.ChatResponse;
-import ru.floerka.max.core.models.response.messages.EditMessageResponse;
+import ru.floerka.max.core.models.messages.Message;
+
 
 @AllArgsConstructor
 @Getter
-@ApiEndpoint(path = "messages", method = HttpMethod.POST, response = EditMessageResponse.class)
-public class EditMessageRequest extends MaxRequest {
+@ApiEndpoint(path = "messages", method = HttpMethod.GET, response = Message.class)
+public class GetMessageRequest extends MaxRequest {
 
     private final @Param(type = ParamType.QUERY) String messageId;
 
-    private final @Param(type = ParamType.BODY) NewMessageBody body;
-
-    private EditMessageRequest(Builder builder) {
+    private GetMessageRequest(Builder builder) {
         messageId = builder.messageId;
-        body = builder.body;
     }
 
     public static final class Builder {
         private String messageId;
-        private NewMessageBody body;
 
         public Builder() {
         }
@@ -39,13 +34,8 @@ public class EditMessageRequest extends MaxRequest {
             return this;
         }
 
-        public Builder body(NewMessageBody body) {
-            this.body = body;
-            return this;
-        }
-
-        public EditMessageRequest build() {
-            return new EditMessageRequest(this);
+        public GetMessageRequest build() {
+            return new GetMessageRequest(this);
         }
     }
 }

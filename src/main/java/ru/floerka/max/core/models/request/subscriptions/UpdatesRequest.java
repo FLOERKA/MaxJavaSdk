@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.floerka.max.core.api.objects.ApiEndpoint;
 import ru.floerka.max.core.api.objects.HttpMethod;
 import ru.floerka.max.core.api.objects.MaxObject;
+import ru.floerka.max.core.api.objects.MaxRequest;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.api.queries.ParamType;
 import ru.floerka.max.core.models.response.subscriptions.AddSubscriptionsResponse;
@@ -14,9 +15,8 @@ import ru.floerka.max.core.models.response.subscriptions.UpdatesResponse;
 
 @AllArgsConstructor
 @Getter
-@Builder
 @ApiEndpoint(path = "updates", method = HttpMethod.POST, response = UpdatesResponse.class)
-public class UpdatesRequest extends MaxObject {
+public class UpdatesRequest extends MaxRequest {
 
     private final @Param(require = false, type = ParamType.QUERY) Integer limit;
     private final @Param(require = false, type = ParamType.QUERY) Integer timeout;

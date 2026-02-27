@@ -3,6 +3,7 @@ package ru.floerka.max.core.models.messages.chats;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
+import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.models.image.Image;
 import ru.floerka.max.core.models.messages.Message;
@@ -12,7 +13,7 @@ import ru.floerka.max.core.models.user.UserWithPhoto;
 
 @AllArgsConstructor
 @Getter
-public class Chat {
+public class Chat extends MaxObject {
 
     private final @Param long chatId;
     private final @Param ChatType chatType;

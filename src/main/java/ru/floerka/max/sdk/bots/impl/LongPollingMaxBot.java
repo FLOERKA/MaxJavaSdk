@@ -1,15 +1,19 @@
 package ru.floerka.max.sdk.bots.impl;
 
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import ru.floerka.max.core.models.messages.update.Update;
 import ru.floerka.max.core.models.request.subscriptions.UpdatesRequest;
 import ru.floerka.max.core.models.response.subscriptions.UpdatesResponse;
 import ru.floerka.max.sdk.bots.DefaultMaxBot;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public abstract class LongPollingMaxBot extends DefaultMaxBot {
 
     private long lastMarker = -1;
@@ -29,14 +33,13 @@ public abstract class LongPollingMaxBot extends DefaultMaxBot {
     @Override
     protected void setup() {
         executor.schedule(this::schedule, millisPeriod, TimeUnit.MILLISECONDS);
+        log.info("LongPoll bot successful registered and started.");
     }
-
-    public abstract void update(Update update);
-    public abstract void update(List<Update> updates);
 
 
     private void schedule() {
         List<Update> updates = checkUpdates();
+        updates.removeIf(Objects::isNull);
         this.update(updates);
         updates.forEach(this::update);
     }
@@ -55,6 +58,13 @@ public abstract class LongPollingMaxBot extends DefaultMaxBot {
         if(response.getMarker() != null)
             lastMarker = response.getMarker();
         return updates;
+    }
+
+    public void update(Update update) {
+
+    }
+    public void update(List<Update> updates) {
+
     }
 
 }

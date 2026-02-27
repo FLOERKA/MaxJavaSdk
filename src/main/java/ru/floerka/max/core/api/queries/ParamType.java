@@ -4,5 +4,6 @@ public enum ParamType {
 
     DEFAULT,
     BODY,
-    QUERY
+    QUERY,
+    URL
 }

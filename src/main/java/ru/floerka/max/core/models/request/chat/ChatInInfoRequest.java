@@ -9,26 +9,21 @@ import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.objects.MaxRequest;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.api.queries.ParamType;
-import ru.floerka.max.core.models.response.chat.ChatResponse;
+import ru.floerka.max.core.models.user.ChatMember;
 
 @AllArgsConstructor
 @Getter
-@Builder
-@ApiEndpoint(path = "chats/{?}/members", method = HttpMethod.POST, response = ChatResponse.class)
-public class ChatAddMembersRequest extends MaxRequest {
+@ApiEndpoint(path = "chats/{?}/members/me", method = HttpMethod.GET, response = ChatMember.class)
+public class ChatInInfoRequest extends MaxRequest {
 
     private final @Param(type = ParamType.URL) Long chatId;
 
-    private final @Param Integer[] userIds;
-
-    private ChatAddMembersRequest(Builder builder) {
+    private ChatInInfoRequest(Builder builder) {
         chatId = builder.chatId;
-        userIds = builder.userIds;
     }
 
     public static final class Builder {
         private Long chatId;
-        private Integer[] userIds;
 
         public Builder() {
         }
@@ -38,13 +33,8 @@ public class ChatAddMembersRequest extends MaxRequest {
             return this;
         }
 
-        public Builder userIds(Integer[] userIds) {
-            this.userIds = userIds;
-            return this;
-        }
-
-        public ChatAddMembersRequest build() {
-            return new ChatAddMembersRequest(this);
+        public ChatInInfoRequest build() {
+            return new ChatInInfoRequest(this);
         }
     }
 }

@@ -66,6 +66,10 @@ public class OkHttpMaxClient extends OkHttpService {
                 if(body != null)
                     request.post(body);
             }
+            case PATCH -> {
+                if(body != null)
+                    request.patch(body);
+            }
         }
         addAuthorization(request, token);
 
@@ -92,9 +96,9 @@ public class OkHttpMaxClient extends OkHttpService {
         addAuthorization(builder, accessToken);
 
         ClientResponse response = getResponse(builder.build());
-        if(response != null && response.isSuccessful()) {
+        if (response != null && response.isSuccessful()) {
             String body = response.getText();
-            if(body != null && JsonUtils.isJson(body)) {
+            if (body != null && JsonUtils.isJson(body)) {
                 return JsonConverter.fromObject(new JSONObject(body), BotInfo.class);
             }
         }

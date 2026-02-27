@@ -9,27 +9,28 @@ import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.objects.MaxRequest;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.api.queries.ParamType;
-import ru.floerka.max.core.models.messages.enums.actions.SenderAction;
-import ru.floerka.max.core.models.response.chat.ChatActionResponse;
 import ru.floerka.max.core.models.response.chat.ChatResponse;
-import ru.floerka.max.core.models.response.subscriptions.UpdatesResponse;
 
 @AllArgsConstructor
 @Getter
-@ApiEndpoint(path = "chats/{?}/actions", method = HttpMethod.POST, response = ChatActionResponse.class)
-public class ChatActionRequest extends MaxRequest {
+@ApiEndpoint(path = "chats/{?}/members", method = HttpMethod.DELETE, response = ChatResponse.class)
+public class ChatDeleteMembersRequest extends MaxRequest {
 
     private final @Param(type = ParamType.URL) Long chatId;
-    private final @Param SenderAction action;
 
-    private ChatActionRequest(Builder builder) {
+    private final @Param(type = ParamType.QUERY) Long userId;
+    private final @Param(type = ParamType.QUERY, require = false) Boolean block;
+
+    private ChatDeleteMembersRequest(Builder builder) {
         chatId = builder.chatId;
-        action = builder.action;
+        userId = builder.userId;
+        block = builder.block;
     }
 
     public static final class Builder {
         private Long chatId;
-        private SenderAction action;
+        private Long userId;
+        private Boolean block;
 
         public Builder() {
         }
@@ -39,13 +40,18 @@ public class ChatActionRequest extends MaxRequest {
             return this;
         }
 
-        public Builder action(SenderAction action) {
-            this.action = action;
+        public Builder userId(Long userId) {
+            this.userId = userId;
             return this;
         }
 
-        public ChatActionRequest build() {
-            return new ChatActionRequest(this);
+        public Builder block(Boolean block) {
+            this.block = block;
+            return this;
+        }
+
+        public ChatDeleteMembersRequest build() {
+            return new ChatDeleteMembersRequest(this);
         }
     }
 }
