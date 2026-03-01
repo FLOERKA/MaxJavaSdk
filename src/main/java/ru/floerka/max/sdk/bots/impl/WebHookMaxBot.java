@@ -16,7 +16,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Slf4j
-public abstract class WebHookMaxBot extends DefaultMaxBot {
+public class WebHookMaxBot extends DefaultMaxBot {
 
     @Setter
     private String url = null;
@@ -62,20 +62,12 @@ public abstract class WebHookMaxBot extends DefaultMaxBot {
         random.nextBytes(bytes);
         return Base64.getEncoder().encodeToString(bytes);
     }
-    private String[] reGenerateTypes(Update.Type[] from) {
-        Update.Type[] types = Update.Type.values();
+    private String[] reGenerateTypes(Update.Type[] types) {
         String[] strings = new String[types.length];
         for(int i = 0; i < types.length; i++) {
             strings[i] = types[i].toString().toLowerCase();
         }
         return strings;
-    }
-
-    public void update(Update update) {
-
-    }
-    public void update(List<Update> updates) {
-
     }
 
 }

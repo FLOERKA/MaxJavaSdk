@@ -12,13 +12,19 @@ import java.util.Locale;
 
 @AllArgsConstructor
 @Getter
-@Builder
 public class Update extends MaxObject {
 
     private final @Param String updateType;
     private final @Param long timestamp;
     private final @Param Message message;
     private final @Param(require = false) String userLocale;
+
+    private Update(Builder builder) {
+        updateType = builder.updateType;
+        timestamp = builder.timestamp;
+        message = builder.message;
+        userLocale = builder.userLocale;
+    }
 
     public Type getTypeAsEnum() {
         return Type.valueOf(updateType.toUpperCase(Locale.ROOT));
@@ -41,5 +47,39 @@ public class Update extends MaxObject {
         BOT_STARTED,
         BOT_STOPPED,
         CHAT_TITLE_CHANGED
+    }
+
+    public static final class Builder {
+        private String updateType;
+        private long timestamp;
+        private Message message;
+        private String userLocale;
+
+        public Builder() {
+        }
+
+        public Builder updateType(String updateType) {
+            this.updateType = updateType;
+            return this;
+        }
+
+        public Builder timestamp(long timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder message(Message message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder userLocale(String userLocale) {
+            this.userLocale = userLocale;
+            return this;
+        }
+
+        public Update build() {
+            return new Update(this);
+        }
     }
 }

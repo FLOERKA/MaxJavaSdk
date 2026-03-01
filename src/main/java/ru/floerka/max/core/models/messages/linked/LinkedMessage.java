@@ -11,7 +11,6 @@ import ru.floerka.max.core.models.messages.enums.MessageLinkType;
 
 @AllArgsConstructor
 @Getter
-@Builder
 public class LinkedMessage extends MaxObject {
 
     private final @Param MessageLinkType type;
@@ -19,4 +18,44 @@ public class LinkedMessage extends MaxObject {
     private final @Param long chatId;
     private final @Param MessageBody message;
 
+    private LinkedMessage(Builder builder) {
+        type = builder.type;
+        sender = builder.sender;
+        chatId = builder.chatId;
+        message = builder.message;
+    }
+
+    public static final class Builder {
+        private MessageLinkType type;
+        private User sender;
+        private long chatId;
+        private MessageBody message;
+
+        public Builder() {
+        }
+
+        public Builder type(MessageLinkType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder sender(User sender) {
+            this.sender = sender;
+            return this;
+        }
+
+        public Builder chatId(long chatId) {
+            this.chatId = chatId;
+            return this;
+        }
+
+        public Builder message(MessageBody message) {
+            this.message = message;
+            return this;
+        }
+
+        public LinkedMessage build() {
+            return new LinkedMessage(this);
+        }
+    }
 }

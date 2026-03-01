@@ -1,20 +1,23 @@
 package ru.floerka.max.sdk.bots;
 
-import ru.floerka.max.core.models.bot.BotInfo;
-import ru.floerka.max.sdk.exceptions.CannotRegisterException;
+import ru.floerka.max.core.models.messages.update.Update;
+import ru.floerka.max.sdk.bots.impl.LongPollingMaxBot;
+import ru.floerka.max.sdk.bots.impl.WebHookMaxBot;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 public class MaxBots {
 
-    private static final List<DefaultMaxBot> registeredBots = new CopyOnWriteArrayList<>();
-
-    public static void register(DefaultMaxBot bot) {
-       BotInfo botInfo = bot.client.botInfo(bot.getToken());
-       if(botInfo == null) {
-           throw new CannotRegisterException("");
-       }
-       registeredBots.add(bot);
+    public static void fastBot(String token, long millisPeriod, Consumer<Update> updateConsumer) {
+        LongPollingMaxBot maxBot = new LongPollingMaxBot(token, millisPeriod);
+        maxBot.setOnUpdateHandler(updateConsumer);
+    }
+    public static void fastBot(String token, Consumer<Update> updateConsumer) {
+        LongPollingMaxBot maxBot = new LongPollingMaxBot(token);
+        maxBot.setOnUpdateHandler(updateConsumer);
+    }
+    public static void fastBot(String token, String url, Consumer<Update> updateConsumer) {
+        WebHookMaxBot maxBot = new WebHookMaxBot(token, url);
+        maxBot.setOnUpdateHandler(updateConsumer);
     }
 }

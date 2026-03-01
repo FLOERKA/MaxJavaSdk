@@ -14,17 +14,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public abstract class LongPollingMaxBot extends DefaultMaxBot {
+public class LongPollingMaxBot extends DefaultMaxBot {
 
     private long lastMarker = -1;
-    private long millisPeriod = 10;
+    private long millisPeriod = 50;
     private final ScheduledExecutorService executor;
 
     public LongPollingMaxBot(String token) {
         super(token);
         this.executor = Executors.newSingleThreadScheduledExecutor();
     }
-    public LongPollingMaxBot(String token, int millisTimeout) {
+    public LongPollingMaxBot(String token, long millisTimeout) {
         super(token);
         this.executor = Executors.newSingleThreadScheduledExecutor();
         this.millisPeriod = millisTimeout;
@@ -41,7 +41,7 @@ public abstract class LongPollingMaxBot extends DefaultMaxBot {
         List<Update> updates = checkUpdates();
         updates.removeIf(Objects::isNull);
         this.update(updates);
-        updates.forEach(this::update);
+        //updates.forEach(this::update);
     }
 
     private synchronized List<Update> checkUpdates() {
@@ -60,11 +60,8 @@ public abstract class LongPollingMaxBot extends DefaultMaxBot {
         return updates;
     }
 
-    public void update(Update update) {
-
-    }
-    public void update(List<Update> updates) {
-
+    public void stop() {
+        executor.shutdown();
     }
 
 }
