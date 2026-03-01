@@ -55,7 +55,7 @@ Gradle
 
 Java
 
-```
+``` java
 public class MessageBot extends LongPollingMaxBot {  
   
     public MessageBot(String token) {  
@@ -84,7 +84,7 @@ public class MessageBot extends LongPollingMaxBot {
 }
 
 ```
-```
+``` java
 public static void main(String[] args) {  
     MessageBot messageBot = new MessageBot("TOKEN");  
     //messageBot.stop(); # Принудительная остановка бота  
@@ -101,7 +101,7 @@ public static void main(String[] args) {
 
 Java
 
-```
+``` java
 public static void main(String[] args) {  
     MaxBots.fastBot("TOKEN", update -> {  
         // TODO:  
