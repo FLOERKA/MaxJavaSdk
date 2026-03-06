@@ -17,7 +17,7 @@ public class MaxBots {
         maxBot.setOnUpdateHandler(updateConsumer);
     }
     public static void fastBot(String token, String url, Consumer<Update> updateConsumer) {
-        WebHookMaxBot maxBot = new WebHookMaxBot(token, url);
+        WebHookMaxBot maxBot = new WebHookMaxBot(token, url, 8080);
         maxBot.setOnUpdateHandler(updateConsumer);
     }
 }
