@@ -13,7 +13,7 @@ public class AttachmentRequest {
     private final @Param AttachmentPayload payload;
 
 
-    public AttachmentRequest(Type type, AttachmentPayload payload) {
+    public <T extends AttachmentPayload> AttachmentRequest(Type type, T payload) {
         this.type = type.name().toLowerCase();
         this.payload = payload;
     }
