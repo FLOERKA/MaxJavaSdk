@@ -12,16 +12,17 @@ public class InlineKeyboardPayload extends AttachmentPayload {
     private final @Param Button[] buttons;
 
 
-    public InlineKeyboardPayload(MessageButton... buttons) {
+    @SafeVarargs
+    public <T extends MessageButton> InlineKeyboardPayload(T... buttons) {
         this.buttons = convert(buttons);
     }
 
-    public InlineKeyboardPayload(List<MessageButton> buttons) {
+    public <T extends MessageButton> InlineKeyboardPayload(List<T> buttons) {
         this.buttons = convert(buttons);
-
     }
 
-    private Button[] convert(MessageButton... nonParsedButtons) {
+    @SafeVarargs
+    private <T extends MessageButton> Button[] convert(T... nonParsedButtons) {
         Button[] array = new Button[nonParsedButtons.length];
 
         for(int i =0; i < nonParsedButtons.length; i++) {
@@ -31,12 +32,11 @@ public class InlineKeyboardPayload extends AttachmentPayload {
         }
         return array;
     }
-    private Button[] convert(List<MessageButton> buttons) {
-        MessageButton[] array = new MessageButton[buttons.size()];
-        for(int i =0; i < buttons.size(); i++) {
-            array[i] = buttons.get(i);
-        }
-        return convert(array);
+
+    private <T extends MessageButton> Button[] convert(List<T> buttons) {
+        return buttons.stream()
+                .map(mb -> new Button(mb.getType().name().toLowerCase(), mb))
+                .toArray(Button[]::new);
     }
 
 
