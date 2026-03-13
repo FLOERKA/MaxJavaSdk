@@ -1,16 +1,13 @@
 package ru.floerka.max.core.models.request.chat;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 import ru.floerka.max.core.api.objects.ApiEndpoint;
 import ru.floerka.max.core.api.objects.HttpMethod;
-import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.objects.MaxRequest;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.api.queries.ParamType;
-import ru.floerka.max.core.models.messages.request.PhotoAttachmentRequestPayload;
+import ru.floerka.max.core.models.messages.request.attachment.payload.PhotoPayload;
 import ru.floerka.max.core.models.response.chat.ChatResponse;
 
 @AllArgsConstructor
@@ -19,7 +16,7 @@ import ru.floerka.max.core.models.response.chat.ChatResponse;
 public class ChatPatchRequest extends MaxRequest {
 
     private final @Param(type = ParamType.URL) Long chatId;
-    private final @Param(require = false) PhotoAttachmentRequestPayload icon;
+    private final @Param(require = false) PhotoPayload icon;
     private final @Param(require = false) String title;
     private final @Param(require = false) String pin;
     private final @Param(require = false) Boolean notify;
@@ -34,7 +31,7 @@ public class ChatPatchRequest extends MaxRequest {
 
     public static final class Builder {
         private Long chatId;
-        private PhotoAttachmentRequestPayload icon;
+        private PhotoPayload icon;
         private String title;
         private String pin;
         private Boolean notify;
@@ -47,7 +44,7 @@ public class ChatPatchRequest extends MaxRequest {
             return this;
         }
 
-        public Builder icon(PhotoAttachmentRequestPayload icon) {
+        public Builder icon(PhotoPayload icon) {
             this.icon = icon;
             return this;
         }

@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.models.messages.Message;
+import ru.floerka.max.core.models.messages.callback.Callback;
+import ru.floerka.max.core.models.user.User;
 
 import java.util.Locale;
 
@@ -19,12 +21,17 @@ public class Update extends MaxObject {
     private final @Param Message message;
     private final @Param(require = false) String userLocale;
 
-    private Update(Builder builder) {
-        updateType = builder.updateType;
-        timestamp = builder.timestamp;
-        message = builder.message;
-        userLocale = builder.userLocale;
-    }
+    private final @Param(require = false) Callback callback;
+    private final @Param(require = false) Integer messageId;
+    private final @Param(require = false) Integer chatId;
+    private final @Param(require = false) Integer userId;
+    private final @Param(require = false) User user;
+    private final @Param(require = false) Boolean isChannel;
+    private final @Param(require = false) Long mutedUntil;
+    private final @Param(require = false) Long inviterId;
+    private final @Param(require = false) Long adminId;
+    private final @Param(require = false) String payload;
+    private final @Param(require = false) String title;
 
     public Type getTypeAsEnum() {
         return Type.valueOf(updateType.toUpperCase(Locale.ROOT));
@@ -49,37 +56,7 @@ public class Update extends MaxObject {
         CHAT_TITLE_CHANGED
     }
 
-    public static final class Builder {
-        private String updateType;
-        private long timestamp;
-        private Message message;
-        private String userLocale;
-
-        public Builder() {
-        }
-
-        public Builder updateType(String updateType) {
-            this.updateType = updateType;
-            return this;
-        }
-
-        public Builder timestamp(long timestamp) {
-            this.timestamp = timestamp;
-            return this;
-        }
-
-        public Builder message(Message message) {
-            this.message = message;
-            return this;
-        }
-
-        public Builder userLocale(String userLocale) {
-            this.userLocale = userLocale;
-            return this;
-        }
-
-        public Update build() {
-            return new Update(this);
-        }
+    public boolean hasCallback() {
+        return callback != null;
     }
 }

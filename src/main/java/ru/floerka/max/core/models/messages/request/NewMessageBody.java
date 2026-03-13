@@ -1,12 +1,11 @@
 package ru.floerka.max.core.models.messages.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.queries.Param;
 import ru.floerka.max.core.models.messages.enums.TextFormat;
+import ru.floerka.max.core.models.messages.request.attachment.AttachmentRequest;
 
 @AllArgsConstructor
 @Getter

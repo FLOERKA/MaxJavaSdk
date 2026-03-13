@@ -1,21 +1,19 @@
-package ru.floerka.max.core.models.messages.request;
+package ru.floerka.max.core.models.messages.request.attachment.payload;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 import ru.floerka.max.core.api.objects.MaxObject;
 import ru.floerka.max.core.api.queries.Param;
 
 @AllArgsConstructor
 @Getter
-public class PhotoAttachmentRequestPayload extends MaxObject {
+public class PhotoPayload extends AttachmentPayload {
 
     private final @Param(require = false) String url;
     private final @Param(require = false) String token;
     private final @Param(require = false) Photos photos;
 
-    private PhotoAttachmentRequestPayload(Builder builder) {
+    private PhotoPayload(Builder builder) {
         url = builder.url;
         token = builder.token;
         photos = builder.photos;
@@ -51,8 +49,8 @@ public class PhotoAttachmentRequestPayload extends MaxObject {
             return this;
         }
 
-        public PhotoAttachmentRequestPayload build() {
-            return new PhotoAttachmentRequestPayload(this);
+        public PhotoPayload build() {
+            return new PhotoPayload(this);
         }
     }
 }
